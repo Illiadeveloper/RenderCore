@@ -5,6 +5,7 @@
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
+#include "managers/ResourceContext.h"
 #include "managers/UniformBufferManager.h"
 #include "render/uniforms/MaterialUBO.h"
 #include <iostream>
@@ -20,7 +21,8 @@ glm::mat4 RenderSystem::GetTransformMatrix(TransformComponent transform) {
   return model;
 }
 
-void RenderSystem::SetMaterial(UniformBufferManager &uboManager, MaterialComponent material) {
+void RenderSystem::SetMaterial(UniformBufferManager &uboManager,
+                               MaterialComponent material) {
   MaterialUBO data{};
   data.ambient = material.ambient;
   data.diffuse = material.diffuse;
@@ -29,8 +31,7 @@ void RenderSystem::SetMaterial(UniformBufferManager &uboManager, MaterialCompone
   uboManager.UpdateUBO("Material", data);
 }
 
-void RenderSystem::Update(Coordinator &coordinator, MeshManager &meshManager,
-                          ShaderManager &shaderManager,
+void RenderSystem::Update(Coordinator &coordinator, ResourceContext &resources,
                           UniformBufferManager &uboManager) {
 
   for (auto const &entity : mEntities) {
@@ -39,22 +40,22 @@ void RenderSystem::Update(Coordinator &coordinator, MeshManager &meshManager,
     auto &transformComponent =
         coordinator.GetComponent<TransformComponent>(entity);
 
-    shaderManager.BindShader(shaderComponent.mId);
-    if(coordinator.HasComponent<MaterialComponent>(entity)) {
+    resources.shaders->BindShader(shaderComponent.mId);
+    if (coordinator.HasComponent<MaterialComponent>(entity)) {
       auto &material = coordinator.GetComponent<MaterialComponent>(entity);
       SetMaterial(uboManager, material);
     }
     // ====== VERTEX SHADER ======
-    shaderManager.SetMat4(shaderComponent.mId, "uModel",
-                          GetTransformMatrix(transformComponent));
+    resources.shaders->SetMat4(shaderComponent.mId, "uModel",
+                               GetTransformMatrix(transformComponent));
 
     // ====== FRAG SHADER ==============
-    shaderManager.SetVec3(shaderComponent.mId, "uObjectColor",
-                          shaderComponent.mObjectColor);
+    resources.shaders->SetVec3(shaderComponent.mId, "uObjectColor",
+                               shaderComponent.mObjectColor);
 
-    auto mesh = meshManager.GetMesh(meshComponent.mId);
+    auto mesh = resources.meshes->GetMesh(meshComponent.mId);
 
     mesh->Draw();
-    shaderManager.UnbindShader();
+    resources.shaders->UnbindShader();
   }
 }
