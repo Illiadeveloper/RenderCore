@@ -1,6 +1,6 @@
 #pragma once
-#include "Types.h"
 #include "ComponentArray.h"
+#include "Types.h"
 #include <typeindex>
 
 class ComponentManager {
@@ -31,16 +31,22 @@ public:
     GetComponentArray<T>()->InsertData(entity, component);
   }
 
-  template<typename T> //
+  template <typename T> //
   bool HasComponent(Entity entity) {
     return GetComponentArray<T>()->HasData(entity);
   }
 
-	template<typename T> //
-	void RemoveComponent(Entity entity)
-	{
-		GetComponentArray<T>()->RemoveData(entity);
-	}
+  bool HasComponent(std::type_index typeindex, Entity entity) {
+    auto it = mComponentArrays.find(typeindex);
+    if (it == mComponentArrays.end())
+      return false;
+    return it->second->HasData(entity);
+  }
+
+  template <typename T> //
+  void RemoveComponent(Entity entity) {
+    GetComponentArray<T>()->RemoveData(entity);
+  }
 
   template <typename T> //
   T &GetComponent(Entity entity) {
@@ -70,4 +76,3 @@ private:
         mComponentArrays[typeIndex]);
   }
 };
-

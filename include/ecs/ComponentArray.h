@@ -5,7 +5,9 @@ class IComponentArray {
 public:
   virtual ~IComponentArray() = default;
   virtual void EntityDestroyed(Entity entity) = 0;
+  virtual bool HasData(Entity entity) = 0;
 };
+
 template <typename T> class ComponentArray : public IComponentArray {
 public:
   void InsertData(Entity entity, T component) {
@@ -19,7 +21,7 @@ public:
     mSize++;
   }
   
-  bool HasData(Entity entity) {
+  bool HasData(Entity entity) override {
     return mEntityToIndexMap.find(entity) != mEntityToIndexMap.end();
   }
 
