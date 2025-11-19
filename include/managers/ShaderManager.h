@@ -20,9 +20,11 @@ public:
   void SetMat4(ShaderId id, const std::string &name, const glm::mat4 &matrix);
   void SetVec3(ShaderId id, const std::string &name, const glm::vec3 &vec);
 
-  GLint GetUniformLocation(ShaderId id, const std::string& name);
+  GLint GetUniformLocation(ShaderId id, const std::string &name);
 
   void InvalidateUniformCache(ShaderId id);
+
+  std::pair<std::string, std::string> GetPath(ShaderId id);
 
   ~ShaderManager();
 
@@ -30,5 +32,8 @@ private:
   std::string GetFileContext(const std::string &path);
   std::vector<ShaderId> mIds;
 
-  std::unordered_map<ShaderId, std::unordered_map<std::string, GLint>> mUniformLocationCache;
+  std::unordered_map<ShaderId, std::pair<std::string, std::string>> mIdToPath;
+
+  std::unordered_map<ShaderId, std::unordered_map<std::string, GLint>>
+      mUniformLocationCache;
 };

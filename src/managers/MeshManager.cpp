@@ -23,6 +23,7 @@ MeshId MeshManager::LoadMesh(const std::string &path) {
 
   MeshId id = mNextId++;
   mPathToId[path] = id;
+  mIdToPath[id] = path;
   mIdToMesh[id] = mesh;
 
   return id;
@@ -35,9 +36,11 @@ std::shared_ptr<Mesh> MeshManager::GetMesh(MeshId id) {
   return it->second;
 }
 
+std::string &MeshManager::GetPath(MeshId id) { return mIdToPath[id]; }
+
 void MeshManager::LoadOBJ(const std::string &path,
                           std::vector<Vertex> &outVertices,
-                          std::vector<unsigned int>& outIndices) {
+                          std::vector<unsigned int> &outIndices) {
   std::ifstream file(path);
   if (!file.is_open()) {
     std::cerr << "Failed to open OBJ file: " << path << std::endl;

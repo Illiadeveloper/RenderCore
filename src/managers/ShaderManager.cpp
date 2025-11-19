@@ -5,6 +5,7 @@
 #include "render/Mesh.h"
 #include <fstream>
 #include <iostream>
+#include <utility>
 
 ShaderId ShaderManager::LoadShader(const std::string &frag,
                                    const std::string &vert) {
@@ -73,7 +74,12 @@ ShaderId ShaderManager::LoadShader(const std::string &frag,
   glDeleteShader(vertShader);
 
   mIds.push_back(program);
+  mIdToPath[program] = std::make_pair(vert, frag);
   return program;
+}
+
+std::pair<std::string, std::string> ShaderManager::GetPath(ShaderId id) {
+  return mIdToPath[id];
 }
 
 void ShaderManager::BindShader(ShaderId id) { glUseProgram(id); }
