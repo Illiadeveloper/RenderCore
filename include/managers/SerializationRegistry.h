@@ -2,6 +2,7 @@
 
 #include "ecs/Coordinator.h"
 #include "ecs/Types.h"
+#include "managers/ResourceContext.h"
 #include <functional>
 #include <nlohmann/json.hpp>
 #include <typeindex>
@@ -12,8 +13,8 @@ using Json = nlohmann::json;
 
 struct ComponentSerializer {
   int schema_version;
-  std::function<Json(Entity, Coordinator &)> serialize;
-  std::function<void(Entity, const Json &, Coordinator &)> deserialize;
+  std::function<Json(Entity, Coordinator &, ResourceContext&)> serialize;
+  std::function<void(Entity, const Json &, Coordinator &, ResourceContext&)> deserialize;
 };
 
 class SerializationRegistry {
@@ -23,9 +24,7 @@ public:
     mSerializers[typeid(T)] = std::move(s);
   }
 
-  template<typename T>
-  const ComponentSerializer *Find() {
-    std::type_index typeindex = typeid(T);
+  const ComponentSerializer *Find(std::type_index typeindex) {
     auto it = mSerializers.find(typeindex);
     return it == mSerializers.end() ? nullptr : &it->second;
   }
