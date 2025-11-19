@@ -8,11 +8,13 @@
 #include "components/ShaderComponent.h"
 #include "components/SpotLightComponent.h"
 #include "components/TransformComponent.h"
+#include "ecs/Coordinator.h"
 #include "ecs/Types.h"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/trigonometric.hpp"
 #include "managers/MeshManager.h"
 #include "managers/ResourceContext.h"
+#include "managers/SerializationRegistry.h"
 #include "managers/ShaderManager.h"
 #include "render/uniforms/CameraUBO.h"
 #include "render/uniforms/DirectionalLightUBO.h"
@@ -237,8 +239,8 @@ void App::Run() {
   //
   // mCoordinator.AddComponent(
   //     surface2, TransformComponent{glm::vec3(3.0f, 0.0f, 0.0f),
-  //                                  glm::vec3(0.0f, 0.0f, glm::radians(90.0f)),
-  //                                  glm::vec3(7.0f)});
+  //                                  glm::vec3(0.0f, 0.0f,
+  //                                  glm::radians(90.0f)), glm::vec3(7.0f)});
   // mCoordinator.AddComponent(surface2, surfaceMaterial);
   // mCoordinator.AddComponent(surface2, surfaceRigidBody);
   // mCoordinator.AddComponent(
@@ -264,6 +266,33 @@ void App::Run() {
   mCoordinator.AddComponent(cube2,
                             TransformComponent{glm::vec3(-2.0f, 0.0f, 0.0f)});
   mCoordinator.AddComponent(cube2, material);
+
+  // mCoordinator.GetComponent<TransformComponent>(cube2);
+  // ======= SERIALIZE ==========
+  SerializationRegistry registry;
+  registry.RegisterComponent<TransformComponent>(
+      {.schema_version = 1,
+       .serialize = [](Entity e, Coordinator &c) -> Json {
+         const auto &t = c.GetComponent<TransformComponent>(e);
+         return {{"pos_x", t.mPosition.x}, {"pos_y", t.mPosition.y},
+                 {"pos_z", t.mPosition.z}, {"rot_x", t.mRotation.x},
+                 {"rot_y", t.mRotation.y}, {"rot_z", t.mRotation.z},
+                 {"scale_x", t.mScale.x},  {"scale_y", t.mScale.y},
+                 {"scale_z", t.mScale.z}};
+       },
+       .deserialize =
+           [](Entity e, const Json &j, Coordinator &c) {
+             auto &t = c.GetComponent<TransformComponent>(e);
+             t.mPosition.x = j["pos_x"];
+             t.mPosition.y = j["pos_y"];
+             t.mPosition.z = j["pos_z"];
+             t.mRotation.x = j["rot_x"];
+             t.mRotation.y = j["rot_y"];
+             t.mRotation.z = j["rot_z"];
+             t.mRotation.x = j["scale_x"];
+             t.mRotation.y = j["scale_y"];
+             t.mRotation.z = j["scale_z"];
+           }});
 
   while (!glfwWindowShouldClose(mWindow)) {
     float currentTime = glfwGetTime();
