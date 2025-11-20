@@ -2,6 +2,7 @@
 #include "Types.h"
 #include <algorithm>
 #include <iomanip>
+#include <iostream>
 #include <vector>
 
 class EntityManager {
@@ -62,10 +63,12 @@ public:
 
     auto it = std::find(mLivingEntities.begin(), mLivingEntities.end(), entity);
     if (it != mLivingEntities.end()) {
+      std::cout << "DELETE: " << entity << std::endl;
       mLivingEntities.erase(it);
     }
     // mLivingEntityCount--;
   }
+
   void SetSignature(Entity entity, Signature signature) {
     assert(entity < MAX_ENTITIES && "Entity out of range!!");
     mSignatures[entity] = signature;
@@ -77,6 +80,14 @@ public:
   }
 
   const std::vector<Entity> &GetAllEntities() const { return mLivingEntities; }
+
+  void DestroyAllEntities() {
+    for (Entity e : mLivingEntities) {
+      mSignatures[e].reset();
+      mAvailableEntities.push(e);
+    }
+    mLivingEntities.clear();
+  }
 
 private:
   std::queue<Entity> mAvailableEntities{};

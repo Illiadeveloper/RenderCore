@@ -6,6 +6,7 @@ public:
   virtual ~IComponentArray() = default;
   virtual void EntityDestroyed(Entity entity) = 0;
   virtual bool HasData(Entity entity) = 0;
+  virtual void Clear() = 0;
 };
 
 template <typename T> class ComponentArray : public IComponentArray {
@@ -20,7 +21,7 @@ public:
     mComponentArray[newIndex] = component;
     mSize++;
   }
-  
+
   bool HasData(Entity entity) override {
     return mEntityToIndexMap.find(entity) != mEntityToIndexMap.end();
   }
@@ -56,10 +57,16 @@ public:
     }
   }
 
+  void Clear() {
+    mSize = 0;
+    mEntityToIndexMap.clear();
+    mIndexToEntityMap.clear();
+    mComponentArray.fill(T{}); 
+  }
+
 private:
   std::array<T, MAX_ENTITIES> mComponentArray;
   std::unordered_map<Entity, size_t> mEntityToIndexMap;
   std::unordered_map<size_t, Entity> mIndexToEntityMap;
   size_t mSize;
 };
-

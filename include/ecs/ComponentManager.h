@@ -61,6 +61,12 @@ public:
     }
   }
 
+  void ClearAllEntities() {
+    for (auto const &pair : mComponentArrays) {
+      pair.second->Clear(); 
+    }
+  }
+
 private:
   std::unordered_map<std::type_index, ComponentType> mComponentTypes{};
   std::unordered_map<std::type_index, std::shared_ptr<IComponentArray>>

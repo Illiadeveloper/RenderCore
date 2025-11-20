@@ -82,6 +82,17 @@ public:
     return mEntityManager->GetAllEntities();
   }
 
+  void DestroyAllEntities() { 
+    mEntityManager->DestroyAllEntities();
+    mComponentManager->ClearAllEntities();
+    // for(auto e : GetAllEntities()) {
+    //   // mEntityManager->DestroyEntity(e);
+    //   mSystemManager->EntityDestroyed(e);
+    //   // mComponentManager->EntityDestroyed(e);
+    // }
+    mSystemManager->Clear();
+  }
+
 private:
   std::unique_ptr<ComponentManager> mComponentManager;
   std::unique_ptr<EntityManager> mEntityManager;
