@@ -28,6 +28,8 @@ public:
 
   ~ShaderManager();
 
+  void Clear();
+
 private:
   std::string GetFileContext(const std::string &path);
   std::vector<ShaderId> mIds;

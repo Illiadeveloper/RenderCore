@@ -53,3 +53,11 @@ void CameraSystem::UploadToUBO(Coordinator &coordinator,
     break;
   }
 }
+
+void CameraSystem::ToggleCamera(Coordinator &coordinator) {
+  for (auto const &entity : mEntities) {
+    auto &camera = coordinator.GetComponent<CameraComponent>(entity);
+    camera.mAutoRotate = !camera.mAutoRotate;
+    break;
+  }
+}

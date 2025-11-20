@@ -9,4 +9,5 @@ public:
   void UploadToUBO(Coordinator& coordinator, UniformBufferManager &uboManager, float aspectRation);
   // glm::mat4 GetView(Coordinator& coordinator);
   // glm::mat4 GetProjection(Coordinator& coordinator, float aspectRatio);
+  void ToggleCamera(Coordinator& coordinator);
 };

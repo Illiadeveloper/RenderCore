@@ -1,1 +1,224 @@
-{"entities":[{"components":{"15CameraComponent":{"active":true,"autoRotate":true,"autoRotateSpeed":0.5,"distance":10.0,"farPlane":100.0,"fov":60.0,"maxPitch":1.5,"minPitch":-1.5,"nearPlane":0.10000000149011612,"pitch":0.5,"target_x":0.0,"target_y":0.0,"target_z":0.0,"yaw":0.0},"18TransformComponent":{"pos_x":0.0,"pos_y":0.0,"pos_z":0.0,"rot_x":0.0,"rot_y":0.0,"rot_z":0.0,"scale_x":1.0,"scale_y":1.0,"scale_z":1.0}},"id":0},{"components":{"25DirectionalLightComponent":{"color_b":0.20000000298023224,"color_g":1.0,"color_r":0.20000000298023224,"dir_x":1.0,"dir_y":-1.0,"dir_z":0.0,"intensity":0.30000001192092896}},"id":1},{"components":{"13MeshComponent":{"path":"resources/objects/cube.obj"},"15ShaderComponent":{"color_b":0.20000000298023224,"color_g":0.5,"color_r":1.0,"fragment_path":"resources/shaders/color.frag","vertex_path":"resources/shaders/default.vert"},"18TransformComponent":{"pos_x":0.0,"pos_y":2.0,"pos_z":-2.0,"rot_x":0.0,"rot_y":0.0,"rot_z":0.0,"scale_x":1.0,"scale_y":1.0,"scale_z":1.0},"19PointLightComponent":{"color_b":0.20000000298023224,"color_g":0.5,"color_r":1.0,"constant":0.14000000059604645,"intensity":6.0,"linear":1.0,"quadratic":0.07000000029802322}},"id":2},{"components":{"13MeshComponent":{"path":"resources/objects/cube.obj"},"15ShaderComponent":{"color_b":1.0,"color_g":0.5,"color_r":0.20000000298023224,"fragment_path":"resources/shaders/color.frag","vertex_path":"resources/shaders/default.vert"},"18TransformComponent":{"pos_x":0.0,"pos_y":2.0,"pos_z":2.0,"rot_x":0.0,"rot_y":0.0,"rot_z":0.0,"scale_x":1.0,"scale_y":1.0,"scale_z":1.0},"19PointLightComponent":{"color_b":1.0,"color_g":0.5,"color_r":0.20000000298023224,"constant":0.14000000059604645,"intensity":6.0,"linear":1.0,"quadratic":0.07000000029802322}},"id":3},{"components":{"13MeshComponent":{"path":"resources/objects/surface.obj"},"15ShaderComponent":{"color_b":0.30000001192092896,"color_g":0.30000001192092896,"color_r":0.30000001192092896,"fragment_path":"resources/shaders/default.frag","vertex_path":"resources/shaders/default.vert"},"17MaterialComponent":{"ambient_b":0.0,"ambient_g":0.0,"ambient_r":0.0,"diffuse_b":0.5,"diffuse_g":0.5,"diffuse_r":0.5,"shininess":25.0,"specular_b":0.699999988079071,"specular_g":0.699999988079071,"specular_r":0.699999988079071},"18TransformComponent":{"pos_x":0.0,"pos_y":-1.0,"pos_z":0.0,"rot_x":0.0,"rot_y":0.0,"rot_z":0.0,"scale_x":7.0,"scale_y":7.0,"scale_z":7.0}},"id":4},{"components":{"13MeshComponent":{"path":"resources/objects/cube.obj"},"15ShaderComponent":{"color_b":1.0,"color_g":0.5,"color_r":0.5,"fragment_path":"resources/shaders/default.frag","vertex_path":"resources/shaders/default.vert"},"17MaterialComponent":{"ambient_b":0.019999999552965164,"ambient_g":0.17000000178813934,"ambient_r":0.019999999552965164,"diffuse_b":0.07000000029802322,"diffuse_g":0.6000000238418579,"diffuse_r":0.07000000029802322,"shininess":0.6000000238418579,"specular_b":0.6000000238418579,"specular_g":0.699999988079071,"specular_r":0.6000000238418579},"18TransformComponent":{"pos_x":2.0,"pos_y":1.0,"pos_z":0.0,"rot_x":0.0,"rot_y":0.0,"rot_z":0.0,"scale_x":1.0,"scale_y":1.0,"scale_z":1.0}},"id":5},{"components":{"13MeshComponent":{"path":"resources/objects/cube.obj"},"15ShaderComponent":{"color_b":0.5,"color_g":0.5,"color_r":1.0,"fragment_path":"resources/shaders/default.frag","vertex_path":"resources/shaders/default.vert"},"17MaterialComponent":{"ambient_b":0.10000000149011612,"ambient_g":0.10000000149011612,"ambient_r":0.10000000149011612,"diffuse_b":1.0,"diffuse_g":1.0,"diffuse_r":1.0,"shininess":64.0,"specular_b":0.10000000149011612,"specular_g":0.10000000149011612,"specular_r":0.10000000149011612},"18TransformComponent":{"pos_x":-2.0,"pos_y":0.0,"pos_z":0.0,"rot_x":0.0,"rot_y":0.0,"rot_z":0.0,"scale_x":1.0,"scale_y":1.0,"scale_z":1.0}},"id":6}]}
+{
+  "entities": [
+    {
+      "components": {
+        "15CameraComponent": {
+          "active": true,
+          "autoRotate": true,
+          "autoRotateSpeed": 0.5,
+          "distance": 10.0,
+          "farPlane": 100.0,
+          "fov": 60.0,
+          "maxPitch": 1.5,
+          "minPitch": -1.5,
+          "nearPlane": 0.10000000149011612,
+          "pitch": 0.5,
+          "target_x": 0.0,
+          "target_y": 0.0,
+          "target_z": 0.0,
+          "yaw": 0.0
+        },
+        "18TransformComponent": {
+          "pos_x": 0.0,
+          "pos_y": 0.0,
+          "pos_z": 0.0,
+          "rot_x": 0.0,
+          "rot_y": 0.0,
+          "rot_z": 0.0,
+          "scale_x": 1.0,
+          "scale_y": 1.0,
+          "scale_z": 1.0
+        }
+      },
+      "id": 0
+    },
+    {
+      "components": {
+        "25DirectionalLightComponent": {
+          "color_b": 0.20000000298023224,
+          "color_g": 1.0,
+          "color_r": 0.20000000298023224,
+          "dir_x": 1.0,
+          "dir_y": -1.0,
+          "dir_z": 0.0,
+          "intensity": 0.30000001192092896
+        }
+      },
+      "id": 1
+    },
+    {
+      "components": {
+        "13MeshComponent": { "path": "resources/objects/cube.obj" },
+        "15ShaderComponent": {
+          "color_b": 0.20000000298023224,
+          "color_g": 0.5,
+          "color_r": 1.0,
+          "fragment_path": "resources/shaders/color.frag",
+          "vertex_path": "resources/shaders/default.vert"
+        },
+        "18TransformComponent": {
+          "pos_x": 0.0,
+          "pos_y": 2.0,
+          "pos_z": -2.0,
+          "rot_x": 0.0,
+          "rot_y": 0.0,
+          "rot_z": 0.0,
+          "scale_x": 1.0,
+          "scale_y": 1.0,
+          "scale_z": 1.0
+        },
+        "19PointLightComponent": {
+          "color_b": 0.20000000298023224,
+          "color_g": 0.5,
+          "color_r": 1.0,
+          "constant": 0.14000000059604645,
+          "intensity": 6.0,
+          "linear": 1.0,
+          "quadratic": 0.07000000029802322
+        }
+      },
+      "id": 2
+    },
+    {
+      "components": {
+        "13MeshComponent": { "path": "resources/objects/cube.obj" },
+        "15ShaderComponent": {
+          "color_b": 1.0,
+          "color_g": 0.5,
+          "color_r": 0.20000000298023224,
+          "fragment_path": "resources/shaders/color.frag",
+          "vertex_path": "resources/shaders/default.vert"
+        },
+        "18TransformComponent": {
+          "pos_x": 0.0,
+          "pos_y": 2.0,
+          "pos_z": 2.0,
+          "rot_x": 0.0,
+          "rot_y": 0.0,
+          "rot_z": 0.0,
+          "scale_x": 1.0,
+          "scale_y": 1.0,
+          "scale_z": 1.0
+        },
+        "19PointLightComponent": {
+          "color_b": 1.0,
+          "color_g": 0.5,
+          "color_r": 0.20000000298023224,
+          "constant": 0.14000000059604645,
+          "intensity": 6.0,
+          "linear": 1.0,
+          "quadratic": 0.07000000029802322
+        }
+      },
+      "id": 3
+    },
+    {
+      "components": {
+        "13MeshComponent": { "path": "resources/objects/surface.obj" },
+        "15ShaderComponent": {
+          "color_b": 0.30000001192092896,
+          "color_g": 0.30000001192092896,
+          "color_r": 0.30000001192092896,
+          "fragment_path": "resources/shaders/default.frag",
+          "vertex_path": "resources/shaders/default.vert"
+        },
+        "17MaterialComponent": {
+          "ambient_b": 0.0,
+          "ambient_g": 0.0,
+          "ambient_r": 0.0,
+          "diffuse_b": 0.5,
+          "diffuse_g": 0.5,
+          "diffuse_r": 0.5,
+          "shininess": 25.0,
+          "specular_b": 0.699999988079071,
+          "specular_g": 0.699999988079071,
+          "specular_r": 0.699999988079071
+        },
+        "18TransformComponent": {
+          "pos_x": 0.0,
+          "pos_y": -1.0,
+          "pos_z": 0.0,
+          "rot_x": 0.0,
+          "rot_y": 0.0,
+          "rot_z": 0.0,
+          "scale_x": 7.0,
+          "scale_y": 7.0,
+          "scale_z": 7.0
+        }
+      },
+      "id": 4
+    },
+    {
+      "components": {
+        "13MeshComponent": { "path": "resources/objects/cube.obj" },
+        "15ShaderComponent": {
+          "color_b": 1.0,
+          "color_g": 0.5,
+          "color_r": 0.5,
+          "fragment_path": "resources/shaders/default.frag",
+          "vertex_path": "resources/shaders/default.vert"
+        },
+        "17MaterialComponent": {
+          "ambient_b": 0.019999999552965164,
+          "ambient_g": 0.17000000178813934,
+          "ambient_r": 0.019999999552965164,
+          "diffuse_b": 0.07000000029802322,
+          "diffuse_g": 0.6000000238418579,
+          "diffuse_r": 0.07000000029802322,
+          "shininess": 0.6000000238418579,
+          "specular_b": 0.6000000238418579,
+          "specular_g": 0.699999988079071,
+          "specular_r": 0.6000000238418579
+        },
+        "18TransformComponent": {
+          "pos_x": 2.0,
+          "pos_y": 1.0,
+          "pos_z": 0.0,
+          "rot_x": 0.0,
+          "rot_y": 0.0,
+          "rot_z": 0.0,
+          "scale_x": 1.0,
+          "scale_y": 1.0,
+          "scale_z": 1.0
+        }
+      },
+      "id": 5
+    },
+    {
+      "components": {
+        "13MeshComponent": { "path": "resources/objects/cube.obj" },
+        "15ShaderComponent": {
+          "color_b": 0.5,
+          "color_g": 0.5,
+          "color_r": 1.0,
+          "fragment_path": "resources/shaders/default.frag",
+          "vertex_path": "resources/shaders/default.vert"
+        },
+        "17MaterialComponent": {
+          "ambient_b": 0.10000000149011612,
+          "ambient_g": 0.10000000149011612,
+          "ambient_r": 0.10000000149011612,
+          "diffuse_b": 1.0,
+          "diffuse_g": 1.0,
+          "diffuse_r": 1.0,
+          "shininess": 64.0,
+          "specular_b": 0.10000000149011612,
+          "specular_g": 0.10000000149011612,
+          "specular_r": 0.10000000149011612
+        },
+        "18TransformComponent": {
+          "pos_x": -2.0,
+          "pos_y": 0.0,
+          "pos_z": 0.0,
+          "rot_x": 0.0,
+          "rot_y": 0.0,
+          "rot_z": 0.0,
+          "scale_x": 1.0,
+          "scale_y": 1.0,
+          "scale_z": 1.0
+        }
+      },
+      "id": 6
+    }
+  ]
+}

@@ -100,3 +100,10 @@ void MeshManager::LoadOBJ(const std::string &path,
     }
   }
 }
+
+void MeshManager::Clear() {
+  mPathToId.clear();
+  mIdToPath.clear();
+  mIdToMesh.clear();
+  mNextId = 0;
+}

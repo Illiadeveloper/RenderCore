@@ -85,16 +85,7 @@ std::pair<std::string, std::string> ShaderManager::GetPath(ShaderId id) {
 void ShaderManager::BindShader(ShaderId id) { glUseProgram(id); }
 void ShaderManager::UnbindShader() { glUseProgram(0); }
 
-ShaderManager::~ShaderManager() {
-  for (auto id : mIds) {
-    if (id != 0) {
-      glDeleteProgram(id);
-    }
-    mUniformLocationCache.erase(id);
-  }
-  mIds.clear();
-  mUniformLocationCache.clear();
-}
+ShaderManager::~ShaderManager() { Clear(); }
 
 GLint ShaderManager::GetUniformLocation(ShaderId id, const std::string &name) {
   auto &progCache = mUniformLocationCache[id];
@@ -133,4 +124,15 @@ std::string ShaderManager::GetFileContext(const std::string &path) {
   std::ifstream file(path);
   return std::string(std::istreambuf_iterator<char>(file),
                      std::istreambuf_iterator<char>());
+}
+
+void ShaderManager::Clear() {
+  for (auto id : mIds) {
+    if (id != 0) {
+      glDeleteProgram(id);
+    }
+  }
+  mIds.clear();
+  mIdToPath.clear();
+  mUniformLocationCache.clear();
 }

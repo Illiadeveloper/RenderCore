@@ -1,0 +1,52 @@
+# Pyramid OBJ (4 sides + base)
+# Vertices
+v  0.0  0.5  0.0   # top (1)
+
+v -0.5 -0.5  0.5   # base front-left  (2)
+v  0.5 -0.5  0.5   # base front-right (3)
+v  0.5 -0.5 -0.5   # base back-right  (4)
+v -0.5 -0.5 -0.5   # base back-left   (5)
+
+# UV (one per vertex instance, simple mapping)
+vt 0.5 1.0    # 1 top
+vt 0.0 0.0    # 2
+vt 1.0 0.0    # 3
+
+vt 0.0 0.0    # 4
+vt 1.0 0.0    # 5
+
+vt 0.0 0.0    # 6
+vt 1.0 0.0    # 7
+
+vt 0.0 0.0    # 8
+vt 1.0 0.0    # 9
+
+# Base UV
+vt 0.0 0.0    # 10
+vt 1.0 0.0    # 11
+vt 1.0 1.0    # 12
+vt 0.0 1.0    # 13
+
+# Normals (per face)
+vn  0.0  0.707  0.707   # front face
+vn  0.707  0.707  0.0   # right face
+vn  0.0  0.707 -0.707   # back face
+vn -0.707  0.707  0.0   # left face
+vn  0.0 -1.0   0.0      # bottom face
+
+# Faces
+# front triangle (top, 2, 3)
+f 1/1/1  2/2/1  3/3/1
+
+# right triangle (top, 3, 4)
+f 1/1/2  3/5/2  4/6/2
+
+# back triangle (top, 4, 5)
+f 1/1/3  4/7/3  5/8/3
+
+# left triangle (top, 5, 2)
+f 1/1/4  5/9/4  2/4/4
+
+# base quad (2,3,4,5) split into two triangles
+f 2/10/5  3/11/5  4/12/5
+f 2/10/5  4/12/5  5/13/5

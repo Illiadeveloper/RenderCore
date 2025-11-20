@@ -85,11 +85,6 @@ public:
   void DestroyAllEntities() { 
     mEntityManager->DestroyAllEntities();
     mComponentManager->ClearAllEntities();
-    // for(auto e : GetAllEntities()) {
-    //   // mEntityManager->DestroyEntity(e);
-    //   mSystemManager->EntityDestroyed(e);
-    //   // mComponentManager->EntityDestroyed(e);
-    // }
     mSystemManager->Clear();
   }
 

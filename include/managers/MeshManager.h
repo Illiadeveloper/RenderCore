@@ -15,6 +15,7 @@ public:
   MeshId LoadMesh(const std::string& path);
   std::shared_ptr<Mesh> GetMesh(MeshId id);
   std::string& GetPath(MeshId id);
+  void Clear();
 private:
   std::unordered_map<std::string, MeshId> mPathToId;
   std::unordered_map<MeshId,std::string> mIdToPath;

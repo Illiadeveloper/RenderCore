@@ -29,6 +29,8 @@
 #include "systems/SpotLightSystem.h"
 #include <GL/gl.h>
 #include <X11/XKBlib.h>
+#include <X11/Xlib.h>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -190,8 +192,10 @@ SerializationRegistry App::RegisterSerializeDefaultComponents() {
        },
        .deserialize =
            [](Entity e, const Json &j, Coordinator &c, ResourceContext &) {
-             if (!c.HasComponent<CameraComponent>(e))
+             if (!c.HasComponent<CameraComponent>(e)) {
                c.AddComponent(e, CameraComponent{});
+               std::cout << "ADDED CAMERA COMPONENT" << std::endl;
+             }
              auto &cam = c.GetComponent<CameraComponent>(e);
              cam.mActive = j["active"];
              cam.mTarget.x = j["target_x"];
@@ -373,7 +377,7 @@ void App::Run() {
       mCoordinator.GetSystem<DirectionalLightSystem>();
   auto pointLightSystem = mCoordinator.GetSystem<PointLightSystem>();
   auto spotLightSystem = mCoordinator.GetSystem<SpotLightSystem>();
-  //
+
   // auto shader = mResources.shaders->LoadShader(
   //     "resources/shaders/default.frag", "resources/shaders/default.vert");
   // auto lightShader = mResources.shaders->LoadShader(
@@ -386,7 +390,8 @@ void App::Run() {
   //                                   glm::vec3(0.1f), 64.0f};
   //
   // auto cubeMaterial =
-  //     MaterialComponent{glm::vec3(0.02, 0.17, 0.02), glm::vec3(0.07, 0.6, 0.07),
+  //     MaterialComponent{glm::vec3(0.02, 0.17, 0.02), glm::vec3(0.07, 0.6,
+  //     0.07),
   //                       glm::vec3(0.6, 0.7, 0.6), 0.6};
   //
   // // ======== CAMERA =======
@@ -416,14 +421,16 @@ void App::Run() {
   // mCoordinator.AddComponent(
   //     pointLight1, PointLightComponent{glm::vec3(1.0f, 0.5f, 0.2f), 6.0f});
   // mCoordinator.AddComponent(pointLight1,
-  //                           TransformComponent{glm::vec3(0.0f, 2.0f, -2.0f)});
+  //                           TransformComponent{glm::vec3(0.0f, 2.0f,
+  //                           -2.0f)});
   //
   // mCoordinator.AddComponent(
   //     pointLight1,
   //     MeshComponent{mResources.meshes->LoadMesh("resources/objects/cube.obj")});
   //
   // mCoordinator.AddComponent(
-  //     pointLight1, ShaderComponent{lightShader, glm::vec3(1.0f, 0.5f, 0.2f)});
+  //     pointLight1, ShaderComponent{lightShader, glm::vec3(1.0f, 0.5f,
+  //     0.2f)});
   //
   // Entity pointLight2 = mCoordinator.CreateEntity();
   // mCoordinator.AddComponent(
@@ -434,7 +441,8 @@ void App::Run() {
   //     pointLight2,
   //     MeshComponent{mResources.meshes->LoadMesh("resources/objects/cube.obj")});
   // mCoordinator.AddComponent(
-  //     pointLight2, ShaderComponent{lightShader, glm::vec3(0.2f, 0.5f, 1.0f)});
+  //     pointLight2, ShaderComponent{lightShader, glm::vec3(0.2f,
+  //     0.5f, 1.0f)});
   //
   // // Entity spotLight = mCoordinator.CreateEntity();
   // // mCoordinator.AddComponent(
@@ -447,7 +455,7 @@ void App::Run() {
   // // TransformComponent{glm::vec3(0.0f, 3.0f, 4.0f)});
   // // mCoordinator.AddComponent(spotLight,
   // // MeshComponent{mResources.meshes.LoadMesh(
-  // //                                          "resources/objects/cube.obj")});
+  // // "resources/objects/cube.obj")});
   // // mCoordinator.AddComponent(
   // //     spotLight, ShaderComponent{lightShader, glm::vec3(0.5f, 0.9f,
   // // 0.9f)});
@@ -455,7 +463,8 @@ void App::Run() {
   // // ====== PLACE ======
   //
   // Entity surface1 = mCoordinator.CreateEntity();
-  // mCoordinator.AddComponent(surface1, MeshComponent{mResources.meshes->LoadMesh(
+  // mCoordinator.AddComponent(surface1,
+  // MeshComponent{mResources.meshes->LoadMesh(
   //                                         "resources/objects/surface.obj")});
   // mCoordinator.AddComponent(
   //     surface1, ShaderComponent{shader, glm::vec3(0.3f, 0.3f, 0.3f)});
@@ -477,7 +486,8 @@ void App::Run() {
   // // mCoordinator.AddComponent(
   // //     surface2, TransformComponent{glm::vec3(3.0f, 0.0f, 0.0f),
   // //                                  glm::vec3(0.0f, 0.0f,
-  // //                                  glm::radians(90.0f)), glm::vec3(7.0f)});
+  // //                                  glm::radians(90.0f)),
+  // glm::vec3(7.0f)});
   // // mCoordinator.AddComponent(surface2, surfaceMaterial);
   // // mCoordinator.AddComponent(surface2, surfaceRigidBody);
   // // mCoordinator.AddComponent(
@@ -501,17 +511,116 @@ void App::Run() {
   // mCoordinator.AddComponent(
   //     cube2, ShaderComponent{shader, glm::vec3(1.0f, 0.5f, 0.5f)});
   // mCoordinator.AddComponent(cube2,
-  //                           TransformComponent{glm::vec3(-2.0f, 0.0f, 0.0f)});
+  //                           TransformComponent{glm::vec3(-2.0f, 0.0f,
+  //                           0.0f)});
   // mCoordinator.AddComponent(cube2, material);
   //
   // mCoordinator.GetComponent<TransformComponent>(cube2);
 
-  // ======= SERIALIZE ==========
-  // std::ofstream file("data.json");
-  // file << mSceneManager->SerializeScene();
-  // file.close();
-  // mSceneManager->SaveScene("resources/scenes/scene1.json");
-  mSceneManager->LoadScene("resources/scenes/scene1.json");
+  // mSceneManager->LoadScene("resources/scenes/scene1.json");
+  //
+  // auto shader = mResources.shaders->LoadShader(
+  //     "resources/shaders/default.frag", "resources/shaders/default.vert");
+  //
+  // Entity directionLight = mCoordinator.CreateEntity();
+  // mCoordinator.AddComponent(
+  //     directionLight,
+  //     DirectionalLightComponent{.direction = glm::vec3(0.2f, -1.0f, 0.0f),
+  //                               .lightColor = glm::vec3(1.0f),
+  //                               .intensity = 0.0f});
+  //
+  // Entity piramid = mCoordinator.CreateEntity();
+  // glm::vec3 lightColor = glm::vec3(0.3f, 0.9f, 0.3f);
+  // mCoordinator.AddComponent(piramid, MeshComponent{mResources.meshes->LoadMesh(
+  //                                        "resources/objects/cube.obj")});
+  // mCoordinator.AddComponent(
+  //     piramid, ShaderComponent{mResources.shaders->LoadShader(
+  //                                  "resources/shaders/color.frag",
+  //                                  "resources/shaders/default.vert"),
+  //                              lightColor});
+  // mCoordinator.AddComponent(
+  //     piramid, TransformComponent{.mRotation = glm::vec3(0.5f, 0.1f, 0.3f),
+  //                                 .mScale = glm::vec3(2.0f)});
+  // mCoordinator.AddComponent(
+  //     piramid,
+  //     PointLightComponent{.lightColor = lightColor, .intensity = 6.0f});
+  //
+  // Entity camera = mCoordinator.CreateEntity();
+  // mCoordinator.AddComponent(camera, TransformComponent{});
+  // mCoordinator.AddComponent(camera, CameraComponent{});
+  //
+  // mCoordinator.GetComponent<CameraComponent>(camera).mPitch = 0.4f;
+  // mCoordinator.GetComponent<CameraComponent>(camera).mYaw = -1.3f;
+  // mCoordinator.GetComponent<CameraComponent>(camera).mDistance = 13.0f;
+  // mCoordinator.GetComponent<CameraComponent>(camera).mFov = 60.0f;
+  //
+  // auto createTentacle = [&](const glm::vec3 &tentacleDir) {
+  //   glm::vec3 lastPos = glm::vec3(0.0f);
+  //
+  //   glm::vec3 forward = glm::normalize(tentacleDir);
+  //   glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+  //   if (glm::abs(glm::dot(forward, up)) > 0.99f)
+  //     up = glm::vec3(1.0f, 0.0f, 0.0f);
+  //
+  //   glm::vec3 right = glm::normalize(glm::cross(up, forward));
+  //   up = glm::cross(forward, right);
+  //
+  //   float padding = 3.0f;
+  //
+  //   for (int i = 0; i < 20; ++i) {
+  //     float k = (float)i;
+  //
+  //     float scale = 0.8f + k * 0.2f;
+  //     float spacing = scale * 0.5f;
+  //
+  //     Entity cube = mCoordinator.CreateEntity();
+  //     mCoordinator.AddComponent(cube, MeshComponent{mResources.meshes->LoadMesh(
+  //                                         "resources/objects/piramid.obj")});
+  //     mCoordinator.AddComponent(cube, ShaderComponent{shader, glm::vec3(1.0f)});
+  //
+  //     float offsetForward = padding + k * spacing; 
+  //     float offsetRight = 0.5f * sin(k);          
+  //     float offsetUp = 0.5f * cos(k);            
+  //
+  //     glm::vec3 pos =
+  //         offsetForward * forward + offsetRight * right + offsetUp * up;
+  //
+  //     
+  //     glm::vec3 dir = glm::normalize(pos - lastPos);
+  //
+  //     glm::quat rotQuat = glm::quatLookAt(dir, up);
+  //     glm::vec3 rotEuler = glm::eulerAngles(rotQuat);
+  //
+  //     mCoordinator.AddComponent(cube,
+  //                               TransformComponent{.mPosition = pos,
+  //                                                  .mRotation = rotEuler,
+  //                                                  .mScale = glm::vec3(scale)});
+  //     mCoordinator.AddComponent(
+  //         cube, MaterialComponent{.ambient = glm::vec3(0.32f, 0.22f, 0.02f),
+  //                                 .diffuse = glm::vec3(0.78, 0.56, 0.11),
+  //                                 .specular = glm::vec3(0.99, 0.94, 0.80),
+  //                                 .shininess = 0.21f});
+  //
+  //     lastPos = pos;
+  //   }
+  // };
+  //
+  // createTentacle(glm::vec3(0.1f, 1.0f, 0.0f));
+  // createTentacle(glm::vec3(0.0f, -1.0f, -0.2f));
+  //
+  // createTentacle(glm::vec3(0.0f, 0.2f, 1.0f));
+  // createTentacle(glm::vec3(-0.1f, 0.08f, -1.0f));
+  //
+  // createTentacle(glm::vec3(1.0f, -0.2f, 0.1f));
+  // createTentacle(glm::vec3(-1.0f, 0.1f, 0.0f));
+  //
+  //
+  // mSceneManager->SaveScene("resources/scenes/scene2.json");
+  //
+
+  mSceneManager->LoadScene("resources/scenes/scene1.json"); 
+  static bool spaceWasPressed = false;
+  static bool keyWasPressed[10] = {false};
 
   while (!glfwWindowShouldClose(mWindow)) {
     float currentTime = glfwGetTime();
@@ -521,6 +630,23 @@ void App::Run() {
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    for (int i = 0; i <= 9; ++i) {
+      if (glfwGetKey(mWindow, GLFW_KEY_0 + i) == GLFW_PRESS) {
+        if (!keyWasPressed[i]) {
+          std::string filename =
+              "resources/scenes/scene" + std::to_string(i) + ".json";
+          mCoordinator.DestroyAllEntities();
+          mResources.meshes->Clear();
+          mResources.shaders->Clear();
+
+          mSceneManager->LoadScene(filename); 
+          keyWasPressed[i] = true;
+        }
+      } else {
+        keyWasPressed[i] = false;
+      }
+    }
+
     directionalLightSystem->Update(mCoordinator, mUniformManager);
     pointLightSystem->Update(mCoordinator, mUniformManager);
     spotLightSystem->Update(mCoordinator, mUniformManager);
@@ -529,6 +655,15 @@ void App::Run() {
     cameraSystem->UploadToUBO(mCoordinator, mUniformManager,
                               (float)mWidth / mHeight);
     renderer->Update(mCoordinator, mResources, mUniformManager);
+
+    if (glfwGetKey(mWindow, GLFW_KEY_SPACE) == GLFW_PRESS) {
+      if (!spaceWasPressed) {
+        cameraSystem->ToggleCamera(mCoordinator);
+        spaceWasPressed = true;
+      }
+    } else {
+      spaceWasPressed = false;
+    }
 
     glfwSwapBuffers(mWindow);
     glfwPollEvents();
