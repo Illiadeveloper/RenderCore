@@ -10,6 +10,7 @@
 #include "components/TransformComponent.h"
 #include "ecs/Coordinator.h"
 #include "ecs/Types.h"
+#include "glm/ext/matrix_transform.hpp"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/trigonometric.hpp"
 #include "managers/MeshManager.h"
@@ -28,6 +29,7 @@
 #include "systems/RenderSystem.h"
 #include "systems/SpotLightSystem.h"
 #include <GL/gl.h>
+#include <X11/X.h>
 #include <X11/XKBlib.h>
 #include <X11/Xlib.h>
 #include <cmath>
@@ -531,7 +533,8 @@ void App::Run() {
   //
   // Entity piramid = mCoordinator.CreateEntity();
   // glm::vec3 lightColor = glm::vec3(0.3f, 0.9f, 0.3f);
-  // mCoordinator.AddComponent(piramid, MeshComponent{mResources.meshes->LoadMesh(
+  // mCoordinator.AddComponent(piramid,
+  // MeshComponent{mResources.meshes->LoadMesh(
   //                                        "resources/objects/cube.obj")});
   // mCoordinator.AddComponent(
   //     piramid, ShaderComponent{mResources.shaders->LoadShader(
@@ -574,18 +577,20 @@ void App::Run() {
   //     float spacing = scale * 0.5f;
   //
   //     Entity cube = mCoordinator.CreateEntity();
-  //     mCoordinator.AddComponent(cube, MeshComponent{mResources.meshes->LoadMesh(
+  //     mCoordinator.AddComponent(cube,
+  //     MeshComponent{mResources.meshes->LoadMesh(
   //                                         "resources/objects/piramid.obj")});
-  //     mCoordinator.AddComponent(cube, ShaderComponent{shader, glm::vec3(1.0f)});
+  //     mCoordinator.AddComponent(cube, ShaderComponent{shader,
+  //     glm::vec3(1.0f)});
   //
-  //     float offsetForward = padding + k * spacing; 
-  //     float offsetRight = 0.5f * sin(k);          
-  //     float offsetUp = 0.5f * cos(k);            
+  //     float offsetForward = padding + k * spacing;
+  //     float offsetRight = 0.5f * sin(k);
+  //     float offsetUp = 0.5f * cos(k);
   //
   //     glm::vec3 pos =
   //         offsetForward * forward + offsetRight * right + offsetUp * up;
   //
-  //     
+  //
   //     glm::vec3 dir = glm::normalize(pos - lastPos);
   //
   //     glm::quat rotQuat = glm::quatLookAt(dir, up);
@@ -594,7 +599,8 @@ void App::Run() {
   //     mCoordinator.AddComponent(cube,
   //                               TransformComponent{.mPosition = pos,
   //                                                  .mRotation = rotEuler,
-  //                                                  .mScale = glm::vec3(scale)});
+  //                                                  .mScale =
+  //                                                  glm::vec3(scale)});
   //     mCoordinator.AddComponent(
   //         cube, MaterialComponent{.ambient = glm::vec3(0.32f, 0.22f, 0.02f),
   //                                 .diffuse = glm::vec3(0.78, 0.56, 0.11),
@@ -618,7 +624,93 @@ void App::Run() {
   // mSceneManager->SaveScene("resources/scenes/scene2.json");
   //
 
-  mSceneManager->LoadScene("resources/scenes/scene1.json"); 
+  auto surfaceMaterial =
+      MaterialComponent{glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.55, 0.55, 0.55),
+                        glm::vec3(0.7, 0.7, 0.7), 25};
+
+  auto shader = mResources.shaders->LoadShader(
+      "resources/shaders/default.frag", "resources/shaders/default.vert");
+
+  Entity camera = mCoordinator.CreateEntity();
+  mCoordinator.AddComponent(camera, TransformComponent{});
+  mCoordinator.AddComponent(camera, CameraComponent{});
+
+  // mCoordinator.GetComponent<CameraComponent>(camera).mPitch = -0.05f;
+
+  mCoordinator.GetComponent<CameraComponent>(camera).mPitch = 0.3f;
+  mCoordinator.GetComponent<CameraComponent>(camera).mYaw = 0.0f;
+  mCoordinator.GetComponent<CameraComponent>(camera).mDistance = 5.0f;
+  mCoordinator.GetComponent<CameraComponent>(camera).mFov = 60.0f;
+  mCoordinator.GetComponent<CameraComponent>(camera).mAutoRotate = false;
+
+  Entity directionalLight = mCoordinator.CreateEntity();
+  mCoordinator.AddComponent(
+      directionalLight,
+      DirectionalLightComponent{.direction = glm::vec3(0.2f, -1.0f, 0.3f), .lightColor=glm::vec3(0.0f, 0.4f, 0.8f),
+                                .intensity = 0.2f});
+
+  auto lightShader = mResources.shaders->LoadShader(
+      "resources/shaders/color.frag", "resources/shaders/default.vert");
+  auto createSpotLight = [&](const glm::vec3 &color, const glm::vec3 &pos) {
+    Entity spotLight = mCoordinator.CreateEntity();
+    mCoordinator.AddComponent(spotLight,
+                              MeshComponent{mResources.meshes->LoadMesh(
+                                  "resources/objects/piramid.obj")});
+    mCoordinator.AddComponent(spotLight, ShaderComponent{lightShader, color});
+    mCoordinator.AddComponent(spotLight, TransformComponent{.mPosition = pos});
+
+    glm::vec3 ligthDirection = glm::normalize(glm::vec3(0.0f) - pos);
+
+    mCoordinator.AddComponent(
+        spotLight,
+        SpotLightComponent{.lightColor = color,
+                           .intensity = 2.0f,
+                           .direction = ligthDirection,
+                           .cutOff = glm::cos(glm::radians(30.0f)),
+                           .outerCufOff = glm::cos(glm::radians(40.0f))});
+  };
+
+  float k = 6.0f;
+  float h = 2.0f;
+  createSpotLight(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0, h, 0.57f * k));
+
+  createSpotLight(glm::vec3(0.0f, 1.0f, 0.0f),
+                  glm::vec3(-0.5 * k, h, -0.28 * k));
+  createSpotLight(glm::vec3(0.0f, 0.0f, 1.0f),
+                  glm::vec3(0.5 * k, h, -0.28 * k));
+
+  Entity surface = mCoordinator.CreateEntity();
+  mCoordinator.AddComponent(surface, MeshComponent{mResources.meshes->LoadMesh(
+                                         "resources/objects/surface.obj")});
+  mCoordinator.AddComponent(
+      surface, ShaderComponent{shader, glm::vec3(1.0f, 1.0f, 1.0f)});
+
+  mCoordinator.AddComponent(surface,
+                            TransformComponent{glm::vec3(0.0f, -0.45f, 0.0f),
+                                               glm::vec3(0.0f, 0.0f, 0.0f),
+                                               glm::vec3(10.0f)});
+  mCoordinator.AddComponent(surface, surfaceMaterial);
+
+  // auto monkeyMaterial = MaterialComponent{glm::vec3(0.17f, 0.01f, 0.01f),
+  //                                         glm::vec3(0.61f, 0.04f, 0.04f),
+  //                                         glm::vec3(0.72f, 0.62f, 0.62f), 0.6};
+
+  auto monkeyMaterial = MaterialComponent{glm::vec3(0.24f, 0.19f, 0.07f),
+                                          glm::vec3(0.75f, 0.6f, 0.22f),
+                                          glm::vec3(0.62f, 0.55f, 0.36f), 0.4};
+  Entity monkey = mCoordinator.CreateEntity();
+  mCoordinator.AddComponent(monkey,
+                            MeshComponent{mResources.meshes->LoadMesh(
+                                "resources/objects/blender_monkey.obj")});
+  mCoordinator.AddComponent(monkey, ShaderComponent{shader});
+  mCoordinator.AddComponent(
+      monkey, TransformComponent{
+                  .mPosition = glm::vec3(0.6f, -1.4f, 0.5f),
+                  .mRotation = glm::vec3(glm::radians(-35.0f), 0.0f, 0.3f)});
+  mCoordinator.AddComponent(monkey, monkeyMaterial);
+
+  mSceneManager->SaveScene("resources/scenes/scene3.json");
+  // mSceneManager->LoadScene("resources/scenes/scene1.json");
   static bool spaceWasPressed = false;
   static bool keyWasPressed[10] = {false};
 
@@ -639,7 +731,7 @@ void App::Run() {
           mResources.meshes->Clear();
           mResources.shaders->Clear();
 
-          mSceneManager->LoadScene(filename); 
+          mSceneManager->LoadScene(filename);
           keyWasPressed[i] = true;
         }
       } else {
